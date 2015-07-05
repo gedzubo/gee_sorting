@@ -1,7 +1,12 @@
 class Array
-  def quicksort
+  def quicksort(version = "standard")
     array = self.dup
-    quicksort_method(array, 0, array.length - 1)
+    case version
+    when "standard"
+      quicksort_method(array, 0, array.length - 1)
+    when "randomized"
+      randomized_quicksort_method(array, 0, array.length - 1)
+    end
   end
 
   protected
@@ -26,6 +31,22 @@ class Array
     end
     exchange(array, tmp + 1, ending)
     tmp + 1
+  end
+
+  def randomized_quicksort_method(array, beginning, ending)
+    if beginning < ending
+      random = randomized_partition(array, beginning, ending)
+      randomized_quicksort_method(array, beginning, random - 1)
+      randomized_quicksort_method(array, random + 1, ending)
+    end
+    return array
+  end
+
+  def randomized_partition(array, beginning, ending)
+    prng = Random.new
+    random_index = prng.rand(beginning..ending)
+    exchange(array, ending, random_index)
+    partition(array, beginning, ending)
   end
 
   def exchange(array, x, y)
